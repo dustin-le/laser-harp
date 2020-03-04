@@ -1,4 +1,6 @@
+#include <Stepper.h>
 #include <AccelStepper.h>
+
 AccelStepper stepper (AccelStepper::FULL2WIRE, 51, 53);
 
 // testing a stepper motor with a Pololu A4988 driver board or equivalent
@@ -8,81 +10,29 @@ AccelStepper stepper (AccelStepper::FULL2WIRE, 51, 53);
 int start = 45;
 int directionPin = 51;
 int stepPin = 53;
-int numberOfSteps = 500;
-//byte ledPin = 13;
+int numberOfSteps = 1000;
+// byte ledPin = 13;
 int pulseWidthMicros = 20;  // microseconds
 int millisbetweenSteps = 100; // milliseconds - or try 1000 for slower steps
 
+Stepper stepper1(numberOfSteps,51,53);
+
+int stepCount = 0;         // number of steps the motor has taken
 
 void setup() {
-  stepper.runToNewPosition(start);
+  // initialize the serial port:
   Serial.begin(9600);
-  Serial.println("Starting StepperTest");
-  //digitalWrite(ledPin, LOW);
-  
-  delay(2000);
-
-  pinMode(directionPin, OUTPUT);
-  pinMode(stepPin, OUTPUT);
-  //pinMode(ledPin, OUTPUT);
-  
- 
-  digitalWrite(directionPin, HIGH);
-  for(int n = 0; n < numberOfSteps; n++) {
-    digitalWrite(stepPin, HIGH);
-//    delayMicroseconds(pulseWidthMicros); // this line is probably unnecessary
-    digitalWrite(stepPin, LOW);
-    
-    delay(10);
-    
-    //digitalWrite(ledPin, !digitalRead(ledPin));
-  }
-  
-  //delay(3000);
-  
-
-  digitalWrite(directionPin, LOW);
-  for(int n = 0; n < numberOfSteps; n++) {
-    digitalWrite(stepPin, HIGH);
-    // delayMicroseconds(pulseWidthMicros); // probably not needed
-    digitalWrite(stepPin, LOW);
-    
-    delay(10);
-    
-    //digitalWrite(ledPin, !digitalRead(ledPin));
-  }
 }
 
 void loop() {
+  // step one step:
+  stepper1.setSpeed(30);
+  stepper1.step(numberOfSteps);
+
+  delay(500);
+  stepper1.step(-numberOfSteps);
+  Serial.print("steps:");
+  Serial.println(stepCount);
+  // stepCount++;
+  delay(500);
 }
-
-
-//const int stepPin = 53;
-//const int dirPin = 51;
-//
-//void setup() {
-//  pinMode(stepPin, OUTPUT);
-//  pinMode(dirPin, OUTPUT);
-//}
-//
-//void loop() {
-//  digitalWrite(dirPin, HIGH);
-//  for (int i = 0; i < 200; i++)
-//  {
-//    digitalWrite(stepPin, HIGH);
-//    delayMicroseconds(500);
-//    digitalWrite(stepPin, LOW);
-//    delayMicroseconds(500);
-//  }
-//  delay(1000);
-//
-//  digitalWrite(dirPin, LOW);
-//  for(int i = 0; i < 400; i++)
-//  {
-//    digitalWrite(stepPin, HIGH);
-//    delayMicroseconds(500);
-//    digitalWrite(stepPin, LOW);
-//    delayMicroseconds(500);
-//  }
-//  delay(1000);
-//}
